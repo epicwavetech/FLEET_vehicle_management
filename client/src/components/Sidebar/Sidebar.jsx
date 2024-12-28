@@ -29,9 +29,7 @@ const Sidebar = () => {
 
             if (response && response.data.success === true) {
                 setIsLogoutLoading(false)
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000)
+                navigateTo("/")
             }
         } catch (error) {
             setIsLogoutLoading(false)
