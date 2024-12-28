@@ -44,4 +44,4 @@ export const useStore = create(
   }))
 );
 
-export const SERVER_URL = "https://vehicle-management-server.vercel.app/";
+export const SERVER_URL = "https://vehicle-management-server-axkf.onrender.com";
