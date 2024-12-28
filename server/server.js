@@ -16,7 +16,7 @@ cloudinary.v2.config({
 // cron.schedule("0 0 * * *", checkExpiryDate);
 
 app.get("/", (res) => {
-  return res.statusCode(200).json({ success: true, message: "Hii" });
+  return res.statu(200).json({ success: true, message: "Hii" });
 });
 
 app.listen(process.env.PORT, () =>
