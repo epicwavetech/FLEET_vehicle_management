@@ -38,7 +38,12 @@ const Login = () => {
 
             }
         } catch (error) {
-            toast.error(error.response.data.error)
+            if (error.response) {
+                toast.error(error.response.data.error)
+            } else {
+                toast.error("Server Error!")
+            }
+
             setEmail("")
             setPassword("")
             setIsLoading(false)
@@ -74,7 +79,9 @@ const Login = () => {
                         required
                     />
                 </div>
-                <button type="submit" className="login-button" disabled={isLoading}>Login</button>
+                <button type="submit" className="login-button" disabled={isLoading}>
+                    {isLoading ? <div className="login-spinner"></div> : "Login"}
+                </button>
             </form>
         </div>
     );

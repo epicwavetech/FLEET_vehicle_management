@@ -5,15 +5,13 @@
   height: 100vh;
   background-color: #f0f0f0;
   // overflow: hidden;
-  .sidebar-container{
+  .sidebar-container {
     height: 100vh;
     // border: 1px solid red;
     position: fixed;
     width: 15%;
   }
 }
-
-
 
 .dashboard-content {
   // flex: 1;
@@ -36,13 +34,13 @@
   }
 }
 
-.notification{
+.notification {
   position: absolute;
   top: 20px;
   right: 20px;
   cursor: pointer;
 }
-.notification-count{
+.notification-count {
   position: absolute;
   top: 15px;
   right: 15px;
@@ -55,4 +53,58 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+@media screen and (max-width: 1024px) {
+  .device-warning-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    color: white;
+    font-family: Arial, sans-serif;
+
+    .warning-message {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      padding: 0 1rem;
+    }
+
+    .continue-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+
+  .app-content {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  .device-warning-overlay {
+    display: none;
+  }
+
+  .app-content {
+    display: block;
+  }
 }

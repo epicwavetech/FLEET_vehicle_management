@@ -1,5 +1,5 @@
 
-import { useStore } from '../../store/store.js';
+import { SERVER_URL, useStore } from '../../store/store.js';
 import "./Sidebar.scss"
 import { toast } from "react-hot-toast"
 import { MdDashboard } from "react-icons/md";
@@ -7,24 +7,37 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { MdGroups } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 // import Cookies from 'js-cookie';
 
 const Sidebar = () => {
     const navigateTo = useNavigate();
     const location = useLocation();
     const url = location.pathname;
+    const [isLogoutLoading, setIsLogoutLoading] = useState(false)
     // console.log(url)
 
     const { activeMenuItem, setActiveMenuItem } = useStore();
 
-    const handleLogout = () => {
+    const handleLogout = async (e) => {
+        e.preventDefault();
+        try {
+            setIsLogoutLoading(true)
+            toast.success('Logging out...');
+            const response = await axios.get(`${SERVER_URL}/auth/logout`, { withCredentials: true })
 
-        toast.success('Logging out...');
-        // navigateTo("/")
-        setTimeout(() => {
-            window.location.reload();
-        }, 1000)
+            if (response && response.data.success === true) {
+                setIsLogoutLoading(false)
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000)
+            }
+        } catch (error) {
+            setIsLogoutLoading(false)
+            console.log(error)
+            toast.error("Server Error")
+        }
     };
 
     useEffect(() => {
@@ -50,8 +63,8 @@ const Sidebar = () => {
 
 
             </ul>
-            <button className="logout-btn" onClick={handleLogout}>
-                Logout
+            <button className="logout-btn" onClick={handleLogout} disabled={isLogoutLoading}>
+                {isLogoutLoading ? <div className="logout-spinner"></div> : "Logout"}
             </button>
         </div>
     );

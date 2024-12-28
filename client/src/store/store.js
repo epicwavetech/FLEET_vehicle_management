@@ -44,4 +44,4 @@ export const useStore = create(
   }))
 );
 
-export const SERVER_URL = "http://localhost:4000";
+export const SERVER_URL = "https://vehicle-management-server.vercel.app/";

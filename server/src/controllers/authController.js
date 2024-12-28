@@ -43,6 +43,26 @@ export const enterAdmin = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "dasda" });
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
+export const logoutUser = (req, res, next) => {
+  try {
+    res
+      .status(200)
+      .cookie("token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: process.env.NODE_ENV === "production", // Cookie is not accessible via JavaScript
+        secure: process.env.NODE_ENV === "production", // Set to true if using HTTPS
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      })
+      .json({
+        success: true,
+        message: "Logout successfully",
+      });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Server error" });
   }
 };

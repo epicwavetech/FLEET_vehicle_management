@@ -82,14 +82,37 @@
     border-radius: 8px;
     font-size: 1rem;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
       background-color: #0056b3;
     }
   }
   .login-button:disabled {
-    background-color: #ccc;
-    color: #666;
+    background-color: #afadad;
+    // color: #3f3f3f;
     cursor: not-allowed;
+  }
+  .login-spinner {
+    // border: 1px solid red;
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: not-allowed;
+    border: 2px solid #333;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  /* Spinner Animation */
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 }

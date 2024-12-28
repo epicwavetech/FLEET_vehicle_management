@@ -5,6 +5,7 @@ import { useStore } from '../../store/store.js';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { SERVER_URL } from "../../store/store.js"
+import { MdDelete } from "react-icons/md";
 
 
 const Home = () => {
@@ -15,7 +16,8 @@ const Home = () => {
     const [task, setTask] = useState('');
     const [name, setName] = useState("");
     const [contactNumber, setContactNumber] = useState("");
-    const [isLoading, setIsLoading] = useState(false)
+    const [isAddTaskLoading, setAddTaskIsLoading] = useState(false)
+    const [isAddContactLoading, setAddContactIsLoading] = useState(false)
 
     const fetchTasksOutside = async () => {
         try {
@@ -41,20 +43,20 @@ const Home = () => {
     const handleAddTask = async (e) => {
         e.preventDefault();
         try {
-            setIsLoading(true)
+            setAddTaskIsLoading(true)
             const response = await axios.post(`${SERVER_URL}/other/create-task`, { task }, {
                 withCredentials: true,  // Include credentials (cookies, HTTP auth)
             })
 
             if (response && response.data.success === true) {
-                setIsLoading(false)
+                setAddTaskIsLoading(false)
                 setTask("")
                 toast.success(`${response.data.message}`)
                 fetchTasksOutside()
             }
         } catch (error) {
             console.log(error)
-            setIsLoading(false)
+            setAddTaskIsLoading(false)
             setTask("")
             toast.error("Error adding task")
         }
@@ -67,13 +69,11 @@ const Home = () => {
             })
 
             if (response && response.data.success === true) {
-                setIsLoading(false)
                 toast.success(`${response.data.message}`)
                 fetchTasksOutside()
             }
         } catch (error) {
             console.log(error)
-            setIsLoading(false)
             toast.error("Error deleting task")
         }
     };
@@ -81,20 +81,20 @@ const Home = () => {
     const handleAddContact = async (e) => {
         e.preventDefault();
         try {
-            setIsLoading(true)
+            setAddContactIsLoading(true)
             const response = await axios.post(`${SERVER_URL}/other/add-contact`, { name, contactNumber }, {
                 withCredentials: true,  // Include credentials (cookies, HTTP auth)
             })
 
             if (response && response.data.success === true) {
-                setIsLoading(false)
+                setAddContactIsLoading(false)
                 setContactNumber("")
                 setName("")
                 toast.success(`${response.data.message}`)
                 fetchContactsOutside()
             }
         } catch (error) {
-            setIsLoading(false)
+            setAddContactIsLoading(false)
             setContactNumber("")
             setName("")
             console.log(error.response)
@@ -109,13 +109,11 @@ const Home = () => {
             })
 
             if (response && response.data.success === true) {
-                setIsLoading(false)
                 toast.success(`${response.data.message}`)
                 fetchContactsOutside()
             }
         } catch (error) {
             console.log(error)
-            setIsLoading(false)
             toast.error("Error deleting contact")
         }
     };
@@ -159,13 +157,16 @@ const Home = () => {
                         className="new-task-input"
                         required
                     />
-                    <button type="submit" disabled={isLoading} className="add-task-btn">Add Task</button>
+                    <button type="submit" disabled={isAddTaskLoading} className="add-task-btn">
+                        {isAddTaskLoading ? <div className="task-spinner"></div> : "Add Task"}
+                    </button>
                 </form>
                 <ul>
                     {tasks && tasks.map((task) => (
                         <li key={task._id} className="task-item">
                             {task.task}
-                            <button onClick={() => handleDeleteTask(task._id)} className="delete-btn">Delete</button>
+                            <button onClick={() => handleDeleteTask(task._id)} className="delete-btn"><MdDelete size={20} />
+                            </button>
                         </li>
                     ))}
                 </ul>
@@ -190,14 +191,16 @@ const Home = () => {
                         className="new-contact-phone-input"
                         required
                     />
-                    <button type="submit" disabled={isLoading} className="add-contact-btn">Add Contact</button>
+                    <button type="submit" disabled={isAddContactLoading} className="add-contact-btn">
+                        {isAddContactLoading ? <div className="contact-spinner"></div> : "Add Contact"}
+                    </button>
                 </form>
 
                 <ul>
                     {contacts && contacts.map((contact) => (
                         <li key={contact._id} className="contact-item">
                             <strong>{contact.name}</strong>: {contact.contactNumber}
-                            <button onClick={() => handleDeleteContact(contact._id)} className="delete-btn">Delete</button>
+                            <button onClick={() => handleDeleteContact(contact._id)} className="delete-btn"><MdDelete size={20} /></button>
                         </li>
                     ))}
                 </ul>

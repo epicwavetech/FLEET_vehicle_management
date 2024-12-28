@@ -9,7 +9,7 @@ import Home from '../../components/Home/Home';
 import { IoIosNotifications } from "react-icons/io";
 // import Notification from '../../components/Notification/Notification';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from "react-hot-toast"
 
@@ -17,6 +17,9 @@ import { toast } from "react-hot-toast"
 const Dashboard = () => {
     const navigateTo = useNavigate();
     const { setActiveMenuItem, setExpiringDocs, expiringDocs } = useStore();
+    const [continueAnyway, setContinueAnyway] = useState(false);
+
+    const isDesktop = window.innerWidth >= 1025;
 
 
 
@@ -37,21 +40,33 @@ const Dashboard = () => {
     }, [setExpiringDocs])
 
     return (
-        <div className="dashboard-container">
-            <div className="sidebar-container">
-                <Sidebar />
+        <>
+            {!isDesktop && !continueAnyway && (
+                <div className="device-warning-overlay">
+                    <div className="warning-message">
+                        This application is designed for desktop view only. Please switch to a desktop for the best experience.
+                    </div>
+                    <button className="continue-btn" onClick={() => setContinueAnyway(true)}>
+                        Continue Anyway
+                    </button>
+                </div>
+            )}
+            <div className="dashboard-container">
+                <div className="sidebar-container">
+                    <Sidebar />
+                </div>
+                <div className="dashboard-content">
+                    {/* {renderContent()} */}
+                    <Home />
+                </div>
+                <div className="notification">
+                    <IoIosNotifications size={40} onClick={() => { setActiveMenuItem("notification"); navigateTo("/dashboard/notification") }} />
+                </div>
+                <div className="notification-count" onClick={() => { setActiveMenuItem("notification"); navigateTo("/dashboard/notification") }} >
+                    {expiringDocs.length}
+                </div>
             </div>
-            <div className="dashboard-content">
-                {/* {renderContent()} */}
-                <Home />
-            </div>
-            <div className="notification">
-                <IoIosNotifications size={40} onClick={() => { setActiveMenuItem("notification"); navigateTo("/dashboard/notification") }} />
-            </div>
-            <div className="notification-count" onClick={() => { setActiveMenuItem("notification"); navigateTo("/dashboard/notification") }} >
-                {expiringDocs.length}
-            </div>
-        </div>
+        </>
     );
 };
 

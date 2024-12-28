@@ -15,6 +15,10 @@ cloudinary.v2.config({
 // cron.schedule("* * * * *", checkExpiryDate);
 // cron.schedule("0 0 * * *", checkExpiryDate);
 
+app.get("/", (res) => {
+  return res.statusCode(200).json({ success: true, message: "Hii" });
+});
+
 app.listen(process.env.PORT, () =>
   console.log(`server is listening on port: ${process.env.PORT}`)
 );
