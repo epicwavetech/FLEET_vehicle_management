@@ -1,0 +1,94 @@
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f0f0f0;
+
+  // border: 1px solid red;
+
+  .sidebar-container {
+    height: 100vh;
+    position: fixed;
+    width: 15%;
+  }
+}
+
+.dashboard-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #fff;
+  width: 85%;
+  min-height: 100vh;
+}
+
+.notifications-container {
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
+
+  h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: #007bff;
+  }
+
+  .notifications-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    th {
+      background-color: #007bff;
+      color: white;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      color: #333;
+      border-bottom: 1px solid #ddd;
+
+      .read {
+        color: #28a745;
+        font-weight: bold;
+      }
+
+      .unread {
+        color: #dc3545;
+        font-weight: bold;
+      }
+
+      &:last-child {
+        text-align: center;
+      }
+    }
+  }
+}
+
+.snooze-btn {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &.add-btn {
+    background-color: #28a745;
+    color: white;
+
+    &:hover {
+      background-color: #218838;
+    }
+  }
+}
