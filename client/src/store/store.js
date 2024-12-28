@@ -41,6 +41,10 @@ export const useStore = create(
     //login
     isLogin: null,
     setIsLogin: (item) => set({ isLogin: item }),
+
+    //compatibility
+    continueAnyway: false,
+    setContinueAnyway: (item) => set({ continueAnyway: item }),
   }))
 );
 

@@ -9,15 +9,14 @@ import Home from '../../components/Home/Home';
 import { IoIosNotifications } from "react-icons/io";
 // import Notification from '../../components/Notification/Notification';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 import { toast } from "react-hot-toast"
 
 
 const Dashboard = () => {
     const navigateTo = useNavigate();
-    const { setActiveMenuItem, setExpiringDocs, expiringDocs } = useStore();
-    const [continueAnyway, setContinueAnyway] = useState(false);
+    const { setActiveMenuItem, setExpiringDocs, expiringDocs, continueAnyway, setContinueAnyway } = useStore();
 
     const isDesktop = window.innerWidth >= 1025;
 
