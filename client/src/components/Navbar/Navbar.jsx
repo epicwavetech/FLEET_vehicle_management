@@ -1,8 +1,11 @@
 import { useState } from "react";
 import PropTypes from "prop-types"; // Import PropTypes
 import "./Navbar.scss";
+import { FaFileDownload } from "react-icons/fa";
+import { IoSearch } from "react-icons/io5";
 
-const Navbar = ({ onSearch, onFetchAll, isFetchLoading, isSearchBtnLoading }) => {
+
+const Navbar = ({ onSearch, onFetchAll, isFetchLoading, isSearchBtnLoading, handleDownloadXlsx }) => {
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleSearchChange = (e) => {
@@ -19,23 +22,29 @@ const Navbar = ({ onSearch, onFetchAll, isFetchLoading, isSearchBtnLoading }) =>
         <div className="navbar">
 
             <h2 className="navbar-title">Clients Management</h2>
-            <form className="navbar-search" onSubmit={handleSearchSubmit}>
-                <input
-                    type="text"
-                    placeholder="Search by name, contact no, or email"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    className="navbar-search-input"
-                    required
-                />
-                <button type="submit" className="navbar-search-button" disabled={isSearchBtnLoading}>
-                    {isSearchBtnLoading ? <div className="search-spinner"></div> : "Search"}
-                </button>
-            </form>
+            <div className="working-nav">
+                <form className="navbar-search" onSubmit={handleSearchSubmit}>
+                    <input
+                        type="text"
+                        placeholder={`Search name/contact no/vehicle no`}
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        className="navbar-search-input"
+                        required
+                    />
+                    <button type="submit" className="navbar-search-button" disabled={isSearchBtnLoading}>
+                        {isSearchBtnLoading ? <div className="search-spinner"></div> : <IoSearch />}
+                    </button>
 
-            <button className="fetch-all-btn" onClick={onFetchAll} disabled={isFetchLoading} >
-                {isFetchLoading ? <div className="fetch-spinner"></div> : "Fetch All Clients"}
-            </button>
+                </form>
+
+                <button className="fetch-all-btn" onClick={onFetchAll} disabled={isFetchLoading} >
+                    {isFetchLoading ? <div className="fetch-spinner"></div> : "Fetch All Clients"}
+                </button>
+                <button className="download-btn"><FaFileDownload size={20} onClick={handleDownloadXlsx} /></button>
+
+            </div>
+
         </div>
     );
 };
@@ -46,6 +55,7 @@ Navbar.propTypes = {
     isSearchBtnLoading: PropTypes.bool.isRequired,
     isFetchLoading: PropTypes.bool.isRequired,
     onFetchAll: PropTypes.func.isRequired,
+    handleDownloadXlsx: PropTypes.func.isRequired,
 
 
 };

@@ -9,6 +9,7 @@ import { toast } from "react-hot-toast"
 import Navbar from '../../components/Navbar/Navbar.jsx';
 import { IoIosEye } from "react-icons/io";
 import { MdEditDocument } from "react-icons/md";
+import { downloadAllClientsData } from '../../utils/downloadXlsx.js';
 
 
 
@@ -24,12 +25,30 @@ const Clients = () => {
     const [expiryModal, setExpiryModal] = useState(false);
     const [selectedClientId, setSelectedClientId] = useState(null);
     const [isLoading, setIsLoading] = useState(false)
+    const [isAddLoading, setIsAddLoading] = useState(false)
+    const [isDeleteLoading, setIsDeleteLoading] = useState(false)
     const [isSearchBtnLoading, setIsSearchBtnLoading] = useState(false)
     const [isFetchLoading, setIsFetchLoading] = useState(false)
     const [isLoadingCursor, setIsLoadingCursor] = useState(false)
     const [fvehicleId, setVehicleId] = useState("")
     const [fdocType, setDocType] = useState("")
     const [fpublic_id, setPublic_id] = useState("")
+    const [downloadData, setDownloadData] = useState(false)
+
+    const handleDownloadData = () => {
+        setDownloadData(true)
+    };
+
+    useEffect(() => {
+        if (downloadData === true) {
+            downloadAllClientsData(clients)
+            setDownloadData(false)
+        }
+    }, [clients, setDownloadData, downloadData])
+
+
+
+
 
 
     const fetchSingleClientVehicles = async (_id) => {
@@ -87,14 +106,21 @@ const Clients = () => {
     const fetchAllClients = async () => {
 
         try {
+            setIsLoadingCursor(true)
+            setIsFetchLoading(true)
             const response = await axios.get(`${SERVER_URL}/client/get-all-clients`, { withCredentials: true })
             setClients(response.data.clients)
 
             if (response && response.data.success === true) {
                 // toast.success(`${response.data.message}`)
+                setIsFetchLoading(false)
+                setIsLoadingCursor(false)
+
             }
         } catch (error) {
             console.log(error)
+            setIsFetchLoading(false)
+            setIsLoadingCursor(false)
             toast.error("Can't fetch expiring clients")
         }
 
@@ -106,19 +132,22 @@ const Clients = () => {
 
     const handleDeleteClient = async (clientId) => {
         try {
-            setIsLoading(true)
+            setIsLoadingCursor(true)
+            setIsDeleteLoading(true)
             const response = await axios.delete(`${SERVER_URL}/client/delete-client?clientId=${clientId}`, {
                 withCredentials: true,  // Include credentials (cookies, HTTP auth)
             })
 
             if (response && response.data.success === true) {
-                setIsLoading(false)
+                setIsLoadingCursor(false)
+                setIsDeleteLoading(false)
                 toast.success(`${response.data.message}`)
                 fetchAllClients()
             }
         } catch (error) {
             console.log(error)
-            setIsLoading(false)
+            setIsLoadingCursor(false)
+            setIsDeleteLoading(false)
             toast.error("Error deleting client")
         }
     };
@@ -138,7 +167,7 @@ const Clients = () => {
     const handleAddVehicleModal = async (formData) => {
         try {
             setIsLoadingCursor(true)
-            setIsLoading(true)
+            setIsAddLoading(true)
             const response = await axios.post(`${SERVER_URL}/vehicle/add-vehicle?id=${selectedClientId}`, formData, {
                 withCredentials: true,  // Include credentials (cookies, HTTP auth)
             })
@@ -148,14 +177,14 @@ const Clients = () => {
                 toast.success(`${response.data.message}`)
                 setIsLoadingCursor(false)
                 setSelectedClientId("")
-                setIsLoading(false)
+                setIsAddLoading(false)
                 fetchSingleClientVehicles(selectedClientId)
             }
         } catch (error) {
             toast.error(error.response.data.error)
             setIsLoadingCursor(false)
             setSelectedClientId("")
-            setIsLoading(false)
+            setIsAddLoading(false)
         }
 
     };
@@ -254,7 +283,7 @@ const Clients = () => {
             </div>
             <div className="dashboard-content">
                 <div className="navbar-container">
-                    <Navbar onSearch={searchClient} onFetchAll={fetchAllClients} isFetchLoading={isFetchLoading} isSearchBtnLoading={isSearchBtnLoading} />
+                    <Navbar onSearch={searchClient} onFetchAll={fetchAllClients} isFetchLoading={isFetchLoading} isSearchBtnLoading={isSearchBtnLoading} handleDownloadXlsx={() => { handleDownloadData() }} />
                 </div>
                 <div className="clients-container">
                     <table className="clients-table">
@@ -276,10 +305,10 @@ const Clients = () => {
                                         <td><a target="_blank" href={client.adharCard.url}>View</a></td>
                                         <td><a target="_blank" href={client.panCard.url}>View</a></td>
                                         <td className='btns'>
-                                            <button className="add-btn" disabled={isLoading} onClick={() => handleAddVehicle(client._id)}>
+                                            <button className="add-btn" disabled={isAddLoading} onClick={() => handleAddVehicle(client._id)}>
                                                 Add
                                             </button>
-                                            <button disabled={isLoading} className="delete-btn" onClick={() => handleDeleteClient(client._id)}>
+                                            <button disabled={isDeleteLoading} className="delete-btn" onClick={() => handleDeleteClient(client._id)}>
                                                 Delete
                                             </button>
                                             <button

@@ -11,7 +11,6 @@ const AddNewClient = () => {
     const [lastName, setLastName] = useState('');
     const [gender, setGender] = useState('');
     const [dob, setDob] = useState('');
-    const [email, setEmail] = useState('');
     const [contactNo, setContactNo] = useState('');
     const [address, setAddress] = useState('');
     const [adharCard, setAdharCard] = useState(null);
@@ -69,8 +68,8 @@ const AddNewClient = () => {
             toast.error(contactError);
             return;
         }
-        if (!firstName || !lastName || !gender || !dob || !email || !contactNo || !address || !adharCard || !panCard) {
-            toast.error('All fields are required.');
+        if (!firstName || !lastName || !gender || !dob || !contactNo || !address || !adharCard || !panCard) {
+            toast.error('Missing mandatory fields');
             return;
         }
         // Add further submission logic here
@@ -80,7 +79,6 @@ const AddNewClient = () => {
             formData.append('lastName', lastName);
             formData.append('gender', gender);
             formData.append('dob', dob);
-            formData.append('email', email);
             formData.append('contactNo', contactNo);
             formData.append('address', address);
             formData.append('adharCard', adharCard); // Append the Aadhaar PDF
@@ -92,14 +90,11 @@ const AddNewClient = () => {
             if (response && response.data.success === true) {
                 setIsSubmitLoading(false)
                 toast.success(`${response.data.message}`)
-                setEmail("")
-
                 setFirstName("")
                 setLastName("")
                 setGender("")
                 setDob("")
                 setContactNo("")
-                setEmail("")
                 setAddress("")
                 setAdharCard(null)
                 setPanCard(null)
@@ -117,7 +112,6 @@ const AddNewClient = () => {
             setGender("")
             setDob("")
             setContactNo("")
-            setEmail("")
             setAddress("")
             setAdharCard(null)
             setPanCard(null)
@@ -195,16 +189,6 @@ const AddNewClient = () => {
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="email">Email</label>
-                            <input
-                                type="email"
-                                id="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                        </div>
 
                         <div className="form-group">
                             <label htmlFor="contactNo">Contact Number</label>

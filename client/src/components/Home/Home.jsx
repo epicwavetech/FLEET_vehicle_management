@@ -6,6 +6,8 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import { SERVER_URL } from "../../store/store.js"
 import { MdDelete } from "react-icons/md";
+import DateTimeModal from '../DateTimeModal/DateTimeModal.jsx';
+import { MdEditDocument } from "react-icons/md";
 
 
 const Home = () => {
@@ -14,10 +16,18 @@ const Home = () => {
 
 
     const [task, setTask] = useState('');
+    const [taskDate, setTaskDate] = useState('');
+    // const [taskTime, setTaskTime] = useState('');
+    const [taskHours, setTaskHours] = useState("");
+    const [taskMinutes, setTaskMinutes] = useState("");
+    const [taskPeriod, setTaskPeriod] = useState("AM");
     const [name, setName] = useState("");
     const [contactNumber, setContactNumber] = useState("");
     const [isAddTaskLoading, setAddTaskIsLoading] = useState(false)
     const [isAddContactLoading, setAddContactIsLoading] = useState(false)
+    const [isEditTaskModal, setIsEditTaskModal] = useState(false)
+    const [taskId, setTaskId] = useState(false)
+    const [editBtnLoading, setEditBtnLoading] = useState(false)
 
     const fetchTasksOutside = async () => {
         try {
@@ -40,27 +50,48 @@ const Home = () => {
     }
 
 
+
+
+
+
     const handleAddTask = async (e) => {
         e.preventDefault();
         try {
-            setAddTaskIsLoading(true)
-            const response = await axios.post(`${SERVER_URL}/other/create-task`, { task }, {
-                withCredentials: true,  // Include credentials (cookies, HTTP auth)
-            })
+            setAddTaskIsLoading(true);
+
+            // Assume `taskDate` is a separate state for the date
+            const response = await axios.post(
+                `${SERVER_URL}/other/create-task`,
+                {
+                    task,
+                    date: taskDate,
+                    hours: taskHours, minutes: taskMinutes, period: taskPeriod
+                },
+                {
+                    withCredentials: true, // Include credentials (cookies, HTTP auth)
+                }
+            );
 
             if (response && response.data.success === true) {
-                setAddTaskIsLoading(false)
-                setTask("")
-                toast.success(`${response.data.message}`)
-                fetchTasksOutside()
+                setAddTaskIsLoading(false);
+                setTask("");
+                setTaskHours("");
+                setTaskMinutes("");
+                setTaskPeriod("AM");
+                toast.success(`${response.data.message}`);
+                fetchTasksOutside(); // Refresh tasks
             }
         } catch (error) {
-            console.log(error)
-            setAddTaskIsLoading(false)
-            setTask("")
-            toast.error("Error adding task")
+            console.error(error);
+            setAddTaskIsLoading(false);
+            setTask("");
+            setTaskHours("");
+            setTaskMinutes("");
+            setTaskPeriod("AM");
+            toast.error("Error adding task");
         }
     };
+
 
     const handleDeleteTask = async (_id) => {
         try {
@@ -77,6 +108,40 @@ const Home = () => {
             toast.error("Error deleting task")
         }
     };
+
+    const handleEditTask = (_id) => {
+        setTaskId(_id); // Set task ID first
+        setIsEditTaskModal(true); // Then open the modal
+        console.log(isEditTaskModal)
+    }
+
+    const handleDateTimeModalClose = () => {
+        setIsEditTaskModal(false)
+        setTaskId("")
+    }
+    const handleDateTimeModalSubmit = async ({ date, tHours, tMinutes, tPeriod }) => {
+        try {
+            setEditBtnLoading(true)
+            setIsEditTaskModal(false)
+            const response = await axios.put(`${SERVER_URL}/other/update-task/${taskId}`, { date: date, hours: tHours, minutes: tMinutes, period: tPeriod }, {
+                withCredentials: true,  // Include credentials (cookies, HTTP auth)
+            })
+
+            if (response && response.data.success === true) {
+
+                toast.success(`${response.data.message}`)
+                setEditBtnLoading(false)
+                setTaskId("")
+                fetchTasksOutside()
+            }
+        } catch (error) {
+            toast.error(error.response.data.error)
+            setEditBtnLoading(false)
+            setTaskId("")
+            fetchTasksOutside()
+        }
+
+    }
 
     const handleAddContact = async (e) => {
         e.preventDefault();
@@ -118,6 +183,21 @@ const Home = () => {
         }
     };
 
+    function formatDate(isoString) {
+        // Parse the ISO string to a Date object
+        const date = new Date(isoString);
+
+        // Extract day, month, and year
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const year = date.getFullYear();
+
+        // Return in dd-mm-yyyy format
+        return `${day}-${month}-${year}`;
+    }
+
+
+
 
 
     useEffect(() => {
@@ -145,6 +225,7 @@ const Home = () => {
     }, [setTasks, setContacts])
 
     return (
+
         <div className="home">
             <div className="todo-list">
                 <form action="" onSubmit={handleAddTask}>
@@ -157,6 +238,46 @@ const Home = () => {
                         className="new-task-input"
                         required
                     />
+
+                    {/* Input for date */}
+                    <input
+                        type="date"
+                        value={taskDate}
+                        onChange={(e) => setTaskDate(e.target.value)}
+                        className="task-date-input"
+                    />
+
+                    {/* Input for time */}
+                    <input
+                        type="number"
+                        name="hours"
+                        placeholder="HH"
+                        value={taskHours}
+                        onChange={(e) => setTaskHours(e.target.value)}
+                        min="1"
+                        max="12"
+                        className="time-input-field"
+                    />
+                    :
+                    <input
+                        type="number"
+                        name="minutes"
+                        placeholder="MM"
+                        value={taskMinutes}
+                        onChange={(e) => setTaskMinutes(e.target.value)}
+                        min="0"
+                        max="59"
+                        className="time-input-field"
+                    />
+                    <select
+                        name="period"
+                        value={taskPeriod}
+                        onChange={(e) => setTaskPeriod(e.target.value)}
+                        className="time-period-dropdown"
+                    >
+                        <option value="AM">AM</option>
+                        <option value="PM">PM</option>
+                    </select>
                     <button type="submit" disabled={isAddTaskLoading} className="add-task-btn">
                         {isAddTaskLoading ? <div className="task-spinner"></div> : "Add Task"}
                     </button>
@@ -164,9 +285,19 @@ const Home = () => {
                 <ul>
                     {tasks && tasks.map((task) => (
                         <li key={task._id} className="task-item">
-                            {task.task}
-                            <button onClick={() => handleDeleteTask(task._id)} className="delete-btn"><MdDelete size={20} />
+                            <div className='tasks-list'>
+                                <p><strong>Task:</strong> {task.task}</p>
+                                <p><strong>Date:</strong> {formatDate(task.date)}</p>
+                                <p><strong>Time:</strong> {task.time}</p>
+                            </div>
+
+                            <button onClick={() => handleEditTask(task._id)} disabled={editBtnLoading} className="edit-btn">
+                                <MdEditDocument size={20} />
                             </button>
+                            <button onClick={() => handleDeleteTask(task._id)} className="delete-btn">
+                                <MdDelete size={20} />
+                            </button>
+
                         </li>
                     ))}
                 </ul>
@@ -205,7 +336,16 @@ const Home = () => {
                     ))}
                 </ul>
             </div>
+            {isEditTaskModal && (
+                <DateTimeModal
+                    onClose={handleDateTimeModalClose}
+                    onSave={handleDateTimeModalSubmit}
+                    isOpen={isEditTaskModal}
+                />
+            )}
         </div>
+
+
     );
 };
 

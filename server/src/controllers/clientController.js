@@ -6,8 +6,7 @@ import { Vehicle } from "../models/vehicleModel.js";
 //<==========================================================ADD NEW CLIENT=========================================>
 export const addNewClient = async (req, res, next) => {
   try {
-    const { firstName, lastName, gender, dob, email, contactNo, address } =
-      req.body;
+    const { firstName, lastName, gender, dob, contactNo, address } = req.body;
 
     const { panCard, adharCard } = req.files;
     // console.log(panCard);
@@ -19,7 +18,6 @@ export const addNewClient = async (req, res, next) => {
       !lastName ||
       !gender ||
       !dob ||
-      !email ||
       !contactNo ||
       !address ||
       !panCard ||
@@ -30,16 +28,7 @@ export const addNewClient = async (req, res, next) => {
         .json({ success: false, error: "Enter all fields" });
     }
 
-    let client = await Client.findOne({
-      email,
-    });
-    // console.log(`client is ${client}`);
-
-    if (client) {
-      return res
-        .status(400)
-        .json({ success: false, error: "email already exist" });
-    }
+    let client;
 
     client = await Client.findOne({
       contactNo,
@@ -81,7 +70,6 @@ export const addNewClient = async (req, res, next) => {
       lastName,
       gender,
       dob,
-      email,
       contactNo,
       address,
       panCard: {
@@ -140,6 +128,9 @@ export const searchClients = async (req, res) => {
     } else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(query)) {
       // Query is an email (basic email regex)
       searchCriteria = { email: query };
+    } else if (/^[A-Z]{2}\d{1,2}[A-Z]{1,2}\d{4}$/.test(query)) {
+      // Query is a vehicle number (assumes Indian vehicle number format)
+      searchCriteria = { "vehicles.vehicleNumber": query };
     } else {
       // Query is treated as a name
       searchCriteria = {
@@ -155,7 +146,7 @@ export const searchClients = async (req, res) => {
     if (clients.length === 0) {
       return res
         .status(404)
-        .json({ success: false, message: "No clients found" });
+        .json({ success: false, error: "No clients found" });
     }
 
     return res.status(200).json({ success: true, clients });

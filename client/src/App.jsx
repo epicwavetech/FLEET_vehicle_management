@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useStore } from "./store/store.js";
 import { SERVER_URL } from "./store/store.js";
+import Due from "./pages/Due/Due.jsx";
 
 const App = () => {
   const { isLogin, setIsLogin } = useStore();
@@ -42,6 +43,7 @@ const App = () => {
     { path: "/dashboard/add-client", element: isLogin ? <AddNewClient /> : <Navigate to="/" /> },
     { path: "/dashboard/all-clients", element: isLogin ? <Clients /> : <Navigate to="/" /> },
     { path: "/dashboard/notification", element: isLogin ? <Notification /> : <Navigate to="/" /> },
+    { path: "/dashboard/due", element: isLogin ? <Due /> : <Navigate to="/" /> },
 
   ])
   return (

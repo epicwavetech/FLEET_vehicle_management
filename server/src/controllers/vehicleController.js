@@ -69,6 +69,17 @@ export const addVehicle = async (req, res, next) => {
         success: false,
         error: `Vehicle Number Required`,
       });
+    } else {
+      const vehicleRegex = /^[A-Z]{2}\s?[0-9]{2}\s?[A-Z]{1,2}\s?[0-9]{4}$/;
+
+      // Test the input against the regex
+      const result = vehicleRegex.test(vehicleNumber);
+      if (result === false) {
+        return res.status(400).json({
+          success: false,
+          error: `Required Proper vehicle format`,
+        });
+      }
     }
 
     const {
@@ -228,6 +239,13 @@ export const addVehicle = async (req, res, next) => {
       ...newVehicleData,
       ownerID: client._id,
     });
+
+    client.vehicles.push({
+      vehicleNumber: vehicleNumber,
+      id: newVehicle._id,
+    });
+
+    await client.save();
 
     return res.status(201).json({
       success: true,
@@ -411,12 +429,22 @@ export const checkExpiryDate = async (req, res, next) => {
 //<=================================================SNOOZE NOTIFICATION=================================>
 export const snoozeNotification = async (req, res) => {
   try {
-    const { vehicleId, docType } = req.query;
+    const { vehicleId, docType, snoozeUntil } = req.query;
 
     if (!vehicleId || !docType) {
       return res
         .status(400)
         .json({ error: "Vehicle ID and document type are required" });
+    }
+
+    if (!snoozeUntil) {
+      return res.status(400).json({ error: "Snooze until date is required" });
+    }
+
+    // Validate the snoozeUntil date
+    const snoozeDate = new Date(snoozeUntil);
+    if (isNaN(snoozeDate.getTime())) {
+      return res.status(400).json({ error: "Invalid snooze until date" });
     }
 
     const vehicle = await Vehicle.findById(vehicleId);
@@ -431,18 +459,14 @@ export const snoozeNotification = async (req, res) => {
       return res.status(400).json({ error: "Invalid document type" });
     }
 
-    // Calculate snooze date (2 days from today)
-    const today = new Date();
-    today.setDate(today.getDate() + 2);
-    const snoozedUntil = today.toISOString().split("T")[0];
-
-    doc.snoozedUntil = snoozedUntil;
+    // Update snooze date
+    doc.snoozedUntil = snoozeDate.toISOString().split("T")[0];
 
     await vehicle.save();
 
     res.status(200).json({
       success: true,
-      message: `${docType} notifications snoozed until ${snoozedUntil}`,
+      message: `${docType} notifications snoozed until ${doc.snoozedUntil}`,
     });
   } catch (error) {
     console.error("Error snoozing notification:", error);

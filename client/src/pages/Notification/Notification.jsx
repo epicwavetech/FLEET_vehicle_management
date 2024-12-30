@@ -5,10 +5,14 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { SERVER_URL, useStore } from '../../store/store';
 import { FaBell } from "react-icons/fa6";
+import SnoozeDate from '../../components/SnoozeDate/SnoozeDate';
 
 const Notification = () => {
     const { setExpiringDocs, expiringDocs } = useStore();
     const [isLoading, setIsLoading] = useState(false)
+    const [selectedID, setSelectedID] = useState("")
+    const [documentType, setDocumentType] = useState("")
+    const [isSnoozeModal, setIsSnoozeModal] = useState(false)
 
     const notifications = async () => {
         try {
@@ -21,9 +25,20 @@ const Notification = () => {
 
     }
 
-    const handleSnoozeDoc = async (_id, docType) => {
+    const handleSnoozeModalClose = () => {
+        setIsSnoozeModal(false)
+    }
+
+    const handleSnoozeModalOpen = (_id, docType) => {
+        setIsSnoozeModal(true)
+        setDocumentType(docType)
+        setSelectedID(_id)
+    }
+
+    const handleSnoozeModalSubmit = async ({ date }) => {
         try {
-            const response = await axios.put(`${SERVER_URL}/vehicle/snooze-notification?vehicleId=${_id}&docType=${docType}`, {
+            setIsLoading(true)
+            const response = await axios.put(`${SERVER_URL}/vehicle/snooze-notification?vehicleId=${selectedID}&docType=${documentType}&snoozeUntil=${date}`, {
                 withCredentials: true,  // Include credentials (cookies, HTTP auth)
             })
 
@@ -85,7 +100,7 @@ const Notification = () => {
                                     <td>{notification.email}</td>
                                     <td>{notification.contactNumber}</td>
                                     <td>
-                                        <button className="snooze-btn" disabled={isLoading} onClick={() => handleSnoozeDoc(notification._id, notification.docType)}>
+                                        <button className="snooze-btn" disabled={isLoading} onClick={() => handleSnoozeModalOpen(notification._id, notification.docType)}>
                                             {<FaBell />} Snooze
                                         </button>
                                     </td>
@@ -95,7 +110,18 @@ const Notification = () => {
                     </table>
                 </div>
             </div>
+            {
+                isSnoozeModal && (
+                    <SnoozeDate
+                        onClose={handleSnoozeModalClose}
+                        onSave={handleSnoozeModalSubmit}
+                        isOpen={isSnoozeModal}
+                    />
+                )
+            }
         </div>
+
+
     );
 };
 

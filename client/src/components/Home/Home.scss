@@ -49,6 +49,20 @@
           background-color: #c0392b;
         }
       }
+
+      .edit-btn {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.9rem;
+
+        &:hover {
+          background-color: #218838;
+        }
+      }
     }
 
     .new-task-input,
@@ -151,4 +165,43 @@
       }
     }
   }
+}
+
+// .custom-time-input {
+//   display: flex;
+//   align-items: center;
+//   gap: 5px;
+
+.time-input-field {
+  width: 60px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.time-period-dropdown {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+// }
+
+.task-date-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.tasks-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  // border: 1px solid red;
+  width: 90%;
 }

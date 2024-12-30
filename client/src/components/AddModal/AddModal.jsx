@@ -117,7 +117,7 @@ const AddModal = ({ isOpen, onClose, onSave }) => {
                 </button>
                 <div className="modal-body">
                     <div className="vehicleNumber">
-                        <h2 className='vehicleNo'>Vehicle Number:</h2>
+                        <h3 className='vehicleNo'>Vehicle Number: Format `MH12A1234` or `KA01AB5678`</h3>
                         <input
                             type="text"
                             id="vehicleNumber"

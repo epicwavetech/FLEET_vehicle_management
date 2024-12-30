@@ -7,6 +7,7 @@ import {
   deleteTaskById,
   getAllContacts,
   getAllTask,
+  updateTaskDateTime,
 } from "../controllers/taskAndContactController.js";
 
 const router = express.Router();
@@ -15,6 +16,7 @@ const router = express.Router();
 router.post("/create-task", isLogin, createTask);
 router.get("/get-all-task", isLogin, getAllTask);
 router.delete("/delete-task/:id", isLogin, deleteTaskById);
+router.put("/update-task/:taskId", isLogin, updateTaskDateTime);
 
 //<=============================FOR CONTACT INFO=========================>
 router.post("/add-contact", isLogin, addContact);

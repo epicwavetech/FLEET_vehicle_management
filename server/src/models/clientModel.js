@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import validator from "validator";
 
 const clientSchema = new mongoose.Schema(
   {
@@ -18,12 +17,6 @@ const clientSchema = new mongoose.Schema(
     dob: {
       type: String,
       required: [true, "Please enter client's dob"],
-    },
-    email: {
-      type: String,
-      required: [true, "Please enter client's email"],
-      unique: [true, "email already exist"],
-      validate: validator.isEmail,
     },
     contactNo: {
       type: String,
