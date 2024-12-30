@@ -52,4 +52,4 @@ export const useStore = create(
   }))
 );
 
-export const SERVER_URL = "https://fleet-epicwave.onrender.com";
+export const SERVER_URL = "https://fleet-server-dhhd.onrender.com";
