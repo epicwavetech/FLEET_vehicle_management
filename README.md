@@ -74,7 +74,7 @@ FLEET is a comprehensive MERN stack admin dashboard designed for efficient vehic
 ### Installation
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-repo/FLEET.git
+   git clone https://github.com/SUGOGOi/FLEET_vehicle_management
    cd FLEET
    ```
 
