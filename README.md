@@ -106,7 +106,7 @@ FLEET is a comprehensive MERN stack admin dashboard designed for efficient vehic
 3. **Frontend Setup**:
    - Navigate to the `client` directory:
      ```bash
-     cd ../client
+     cd client
      ```
    - Install dependencies:
      ```bash
