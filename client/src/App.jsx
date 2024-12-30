@@ -1,17 +1,26 @@
-
+import React, { Suspense } from "react";
 import "./App.css"
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom"
 import { Toaster } from "react-hot-toast";
-import Login from './pages/Login/Login';
-import Dashboard from './pages/Dashboard/Dashboard';
-import AddNewClient from "./pages/AddNewClient/AddNewClient";
-import Clients from "./pages/Clients/Clients";
-import Notification from "./pages/Notification/Notification";
 import { useEffect } from "react";
 import axios from "axios";
-import { useStore } from "./store/store.js";
-import { SERVER_URL } from "./store/store.js";
-import Due from "./pages/Due/Due.jsx";
+import { useStore, SERVER_URL } from "./store/store.js";
+
+import Login from './pages/Login/Login';
+const Dashboard = React.lazy(() => import("./pages/Dashboard/Dashboard"))
+// import Dashboard from './pages/Dashboard/Dashboard';
+const AddNewClient = React.lazy(() => import("./pages/AddNewClient/AddNewClient"))
+// import AddNewClient from "./pages/AddNewClient/AddNewClient";
+
+const Clients = React.lazy(() => import("./pages/Clients/Clients"))
+// import Clients from "./pages/Clients/Clients";
+
+const Notification = React.lazy(() => import("./pages/Notification/Notification"))
+// import Notification from "./pages/Notification/Notification";
+
+
+const Due = React.lazy(() => import("./pages/Due/Due.jsx"))
+// import Due from "./pages/Due/Due.jsx";
 
 const App = () => {
   const { isLogin, setIsLogin } = useStore();
@@ -39,11 +48,13 @@ const App = () => {
   }, [setIsLogin, isLogin]);
   const router = createBrowserRouter([
     { path: "/", element: isLogin ? <Navigate to="/dashboard" /> : <Login /> },
-    { path: "/dashboard", element: isLogin ? <Dashboard /> : <Navigate to="/" /> },
-    { path: "/dashboard/add-client", element: isLogin ? <AddNewClient /> : <Navigate to="/" /> },
-    { path: "/dashboard/all-clients", element: isLogin ? <Clients /> : <Navigate to="/" /> },
-    { path: "/dashboard/notification", element: isLogin ? <Notification /> : <Navigate to="/" /> },
-    { path: "/dashboard/due", element: isLogin ? <Due /> : <Navigate to="/" /> },
+    { path: "/dashboard", element: isLogin ? <Suspense fallback={<p>Loading...</p>}><Dashboard /></Suspense> : <Navigate to="/" /> },
+    { path: "/dashboard/add-client", element: isLogin ? <Suspense fallback={<p>Loading...</p>}><AddNewClient /> </Suspense> : <Navigate to="/" /> },
+    { path: "/dashboard/all-clients", element: isLogin ? <Suspense fallback={<p>Loading...</p>}><Clients /></Suspense> : <Navigate to="/" /> },
+    {
+      path: "/dashboard/notification", element: isLogin ? <Suspense fallback={<p>Loading...</p>}><Notification /> </Suspense> : <Navigate to="/" />
+    },
+    { path: "/dashboard/due", element: isLogin ? <Suspense fallback={<p>Loading...</p>}><Due /> </Suspense> : <Navigate to="/" /> },
 
   ])
   return (
