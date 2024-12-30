@@ -56,10 +56,16 @@ const Due = () => {
                 getAllDue(); // Refresh tasks
                 console.log(dues)
                 setIsLoading(false)
+                setName("")
+                setAmount("")
+                setReason("")
             }
         } catch (error) {
             console.error(error);
             setIsLoading(false)
+            setName("")
+            setAmount("")
+            setReason("")
             toast.error(error.response.data.error);
         }
     };
