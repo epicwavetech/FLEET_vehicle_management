@@ -20,11 +20,8 @@ const AddNewClient = () => {
 
 
     const validateFile = (file) => {
-        if (file && file.type !== 'application/pdf') {
-            return 'Only PDF files are allowed.';
-        }
-        if (file && file.size > 150 * 1024) {
-            return 'File size must be less than 150KB.';
+        if (file && file.size > 300 * 1024) {
+            return 'File size must be less than 300KB.';
         }
         return '';
     };
@@ -218,7 +215,6 @@ const AddNewClient = () => {
                             <input
                                 type="file"
                                 id="adharCard"
-                                accept="application/pdf"
                                 onChange={handleAadhaarUpload}
                                 required
 
@@ -230,7 +226,6 @@ const AddNewClient = () => {
                             <input
                                 type="file"
                                 id="panCard"
-                                accept="application/pdf"
                                 onChange={handlePanUpload}
                                 required
                             />

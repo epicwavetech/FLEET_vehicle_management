@@ -12,10 +12,10 @@ const ExpiryModal = ({ isOpen, onClose, onSave, fdocType }) => {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        if (file && file.size <= 150000) {
+        if (file && file.size <= 300000) {
             setPdfFile(file);
         } else {
-            alert("File size should be less than 150KB");
+            alert("File size should be less than 300KB");
         }
     };
 
@@ -62,12 +62,11 @@ const ExpiryModal = ({ isOpen, onClose, onSave, fdocType }) => {
                         />
                     </div>
                     <div className="pdfFile">
-                        <label htmlFor="pdfFile">Attach PDF (max 150KB):</label>
+                        <label htmlFor="file">Attach PDF (max 300KB):</label>
                         <input
                             type="file"
-                            id="pdfFile"
-                            name="pdfFile"
-                            accept=".pdf"
+                            id="file"
+                            name="file"
                             onChange={handleFileChange}
                             required
                         />

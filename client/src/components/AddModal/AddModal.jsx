@@ -29,50 +29,50 @@ const AddModal = ({ isOpen, onClose, onSave }) => {
     //<============================================HANDLE FIELS==============================================>
     const handleTaxFileChange = (e) => {
         const file = e.target.files[0];
-        if (file && file.size <= 150000) {
+        if (file && file.size <= 300000) {
             setTaxPdfFile(file);
         } else {
-            alert("File size should be less than 150KB");
+            alert("File size should be less than 300KB");
         }
     };
     const handlePuccFileChange = (e) => {
         const file = e.target.files[0];
-        if (file && file.size <= 150000) {
+        if (file && file.size <= 300000) {
             setPuccPdfFile(file);
         } else {
-            alert("File size should be less than 150KB");
+            alert("File size should be less than 300KB");
         }
     };
     const handleRcFileChange = (e) => {
         const file = e.target.files[0];
-        if (file && file.size <= 150000) {
+        if (file && file.size <= 300000) {
             setRcPdfFile(file);
         } else {
-            alert("File size should be less than 150KB");
+            alert("File size should be less than 300KB");
         }
     };
     const handlePermitFileChange = (e) => {
         const file = e.target.files[0];
-        if (file && file.size <= 150000) {
+        if (file && file.size <= 300000) {
             setPermitPdfFile(file);
         } else {
-            alert("File size should be less than 150KB");
+            alert("File size should be less than 300KB");
         }
     };
     const handleInsuranceFileChange = (e) => {
         const file = e.target.files[0];
-        if (file && file.size <= 150000) {
+        if (file && file.size <= 300000) {
             setInsurancePdfFile(file);
         } else {
-            alert("File size should be less than 150KB");
+            alert("File size should be less than 300KB");
         }
     };
     const handleFitnessFileChange = (e) => {
         const file = e.target.files[0];
-        if (file && file.size <= 150000) {
+        if (file && file.size <= 300000) {
             setFitnessPdfFile(file);
         } else {
-            alert("File size should be less than 150KB");
+            alert("File size should be less than 300KB");
         }
     };
 
@@ -153,7 +153,7 @@ const AddModal = ({ isOpen, onClose, onSave }) => {
                                 type="file"
                                 id="rcPdfFile"
                                 name="rcPdfFile"
-                                accept=".pdf"
+
                                 onChange={handleRcFileChange}
                             />
                         </div>
@@ -182,7 +182,7 @@ const AddModal = ({ isOpen, onClose, onSave }) => {
                                 type="file"
                                 id="permitPdfFile"
                                 name="permitPdfFile"
-                                accept=".pdf"
+
                                 onChange={handlePermitFileChange}
                             />
                         </div>
@@ -211,7 +211,7 @@ const AddModal = ({ isOpen, onClose, onSave }) => {
                                 type="file"
                                 id="insurancePdfFile"
                                 name="insurancePdfFile"
-                                accept=".pdf"
+
                                 onChange={handleInsuranceFileChange}
                             />
                         </div>
@@ -240,7 +240,7 @@ const AddModal = ({ isOpen, onClose, onSave }) => {
                                 type="file"
                                 id="fitnessPdfFile"
                                 name="fitnessPdfFile"
-                                accept=".pdf"
+
                                 onChange={handleFitnessFileChange}
                             />
                         </div>
@@ -269,7 +269,7 @@ const AddModal = ({ isOpen, onClose, onSave }) => {
                                 type="file"
                                 id="taxPdfFile"
                                 name="taxPdfFile"
-                                accept=".pdf"
+
                                 onChange={handleTaxFileChange}
                             />
                         </div>
@@ -298,7 +298,7 @@ const AddModal = ({ isOpen, onClose, onSave }) => {
                                 type="file"
                                 id="puccPdfFile"
                                 name="puccPdfFile"
-                                accept=".pdf"
+
                                 onChange={handlePuccFileChange}
                             />
                         </div>
