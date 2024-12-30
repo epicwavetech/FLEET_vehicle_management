@@ -19,7 +19,7 @@ const Sidebar = () => {
     const [isLogoutLoading, setIsLogoutLoading] = useState(false)
     // console.log(url)
 
-    const { activeMenuItem, setActiveMenuItem } = useStore();
+    const { activeMenuItem, setActiveMenuItem, setIsLogin } = useStore();
 
     const handleLogout = async (e) => {
         e.preventDefault();
@@ -30,9 +30,11 @@ const Sidebar = () => {
 
             if (response && response.data.success === true) {
                 setIsLogoutLoading(false)
+                setIsLogin(false)
+                navigateTo("/")
                 setTimeout(() => {
                     window.location.reload();
-                }, 1000)
+                }, 500)
             }
         } catch (error) {
             setIsLogoutLoading(false)
