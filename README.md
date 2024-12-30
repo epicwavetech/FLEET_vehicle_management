@@ -2,7 +2,7 @@
 
 ### Developed by Epicewave/SUGOGOi
 
-[Live Demo](https://vehicle-management-client-one.vercel.app/)
+[Live Demo](https://fleet-epicwave.vercel.app/)
 
 ---
 
@@ -39,7 +39,7 @@ FLEET is a comprehensive MERN stack admin dashboard designed for efficient vehic
 
 
 - **Testing Deployment**:
-  - Live version available at [https://vehicle-management-client-one.vercel.app/](https://vehicle-management-client-one.vercel.app/).
+  - Live version available at [https://vehicle-management-client-one.vercel.app/](https://fleet-epicwave.vercel.app/).
 
 ---
 
@@ -74,7 +74,7 @@ FLEET is a comprehensive MERN stack admin dashboard designed for efficient vehic
 ### Installation
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/SUGOGOi/FLEET_vehicle_management
+   git clone https://github.com/epicwavetech/FLEET_vehicle_management
    cd FLEET
    ```
 
