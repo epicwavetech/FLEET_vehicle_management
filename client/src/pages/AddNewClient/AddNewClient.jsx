@@ -160,6 +160,7 @@ const AddNewClient = () => {
                                         type="radio"
                                         name="gender"
                                         value="male"
+                                        checked={gender === 'male'}
                                         onChange={(e) => setGender(e.target.value)}
                                         required
                                     />
@@ -170,6 +171,7 @@ const AddNewClient = () => {
                                         type="radio"
                                         name="gender"
                                         value="female"
+                                        checked={gender === 'female'}
                                         onChange={(e) => setGender(e.target.value)}
                                         required
                                     />

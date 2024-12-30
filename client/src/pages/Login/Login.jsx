@@ -10,7 +10,7 @@ import { MdDarkMode } from "react-icons/md";
 
 const Login = () => {
     // const navigateTo = useNavigate();
-    const [email, setEmail] = useState("")
+    const [name, setName] = useState("")
     const [password, setPassword] = useState("")
     const [isLoading, setIsLoading] = useState(false)
 
@@ -21,16 +21,16 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            if (email && password) {
+            if (name && password) {
                 setIsLoading(true)
-                const response = await axios.post(`${SERVER_URL}/auth/login`, { email, password }, {
+                const response = await axios.post(`${SERVER_URL}/auth/login`, { name, password }, {
                     withCredentials: true,  // Include credentials (cookies, HTTP auth)
                 })
 
                 if (response && response.data.success === true) {
                     setIsLoading(false)
                     toast.success(`Welcome ${response.data.admin.name}`)
-                    setEmail("")
+                    setName("")
                     setPassword("")
                     // navigateTo("/dashboard")
                     window.location.reload();
@@ -44,7 +44,7 @@ const Login = () => {
                 toast.error("Server Error!")
             }
 
-            setEmail("")
+            setName("")
             setPassword("")
             setIsLoading(false)
         }
@@ -60,12 +60,12 @@ const Login = () => {
             <form className={`login-form ${darkMode ? 'dark' : ''}`} onSubmit={handleLogin}>
                 <h2 className="login-title">Login</h2>
                 <div className="form-group">
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="name">USER ID</label>
                     <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        type="text"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         required
                     />
                 </div>

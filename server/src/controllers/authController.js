@@ -3,16 +3,16 @@ import { sendToken } from "../utils/sendToken.js";
 
 export const loginUser = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { name, password } = req.body;
 
-    if (!email || !password) {
+    if (!name || !password) {
       return res.status(400).json({
         success: false,
         error: "Enter all fields",
       });
     }
 
-    const admin = await Admin.findOne({ email, password });
+    const admin = await Admin.findOne({ name, password });
 
     if (!admin) {
       return res.status(401).json({ success: false, error: "Unauthorized" });

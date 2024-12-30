@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import "./App.css"
+import "./App.scss"
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom"
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
@@ -48,13 +48,15 @@ const App = () => {
   }, [setIsLogin, isLogin]);
   const router = createBrowserRouter([
     { path: "/", element: isLogin ? <Navigate to="/dashboard" /> : <Login /> },
-    { path: "/dashboard", element: isLogin ? <Suspense fallback={<p>Loading...</p>}><Dashboard /></Suspense> : <Navigate to="/" /> },
-    { path: "/dashboard/add-client", element: isLogin ? <Suspense fallback={<p>Loading...</p>}><AddNewClient /> </Suspense> : <Navigate to="/" /> },
-    { path: "/dashboard/all-clients", element: isLogin ? <Suspense fallback={<p>Loading...</p>}><Clients /></Suspense> : <Navigate to="/" /> },
     {
-      path: "/dashboard/notification", element: isLogin ? <Suspense fallback={<p>Loading...</p>}><Notification /> </Suspense> : <Navigate to="/" />
+      path: "/dashboard", element: isLogin ? <Suspense fallback={<div className="lazy-div"><p className='lazy-loading'></p></div>}><Dashboard /></Suspense> : <Navigate to="/" />
     },
-    { path: "/dashboard/due", element: isLogin ? <Suspense fallback={<p>Loading...</p>}><Due /> </Suspense> : <Navigate to="/" /> },
+    { path: "/dashboard/add-client", element: isLogin ? <Suspense fallback={<div className="lazy-div"><p className='lazy-loading'></p></div>}><AddNewClient /> </Suspense> : <Navigate to="/" /> },
+    { path: "/dashboard/all-clients", element: isLogin ? <Suspense fallback={<div className="lazy-div"><p className='lazy-loading'></p></div>}><Clients /></Suspense> : <Navigate to="/" /> },
+    {
+      path: "/dashboard/notification", element: isLogin ? <Suspense fallback={<div className="lazy-div"><p className='lazy-loading'></p></div>}><Notification /> </Suspense> : <Navigate to="/" />
+    },
+    { path: "/dashboard/due", element: isLogin ? <Suspense fallback={<div className="lazy-div"><p className='lazy-loading'></p></div>}><Due /> </Suspense> : <Navigate to="/" /> },
 
   ])
   return (
