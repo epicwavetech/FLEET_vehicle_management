@@ -45,6 +45,10 @@ export const useStore = create(
     //compatibility
     continueAnyway: false,
     setContinueAnyway: (item) => set({ continueAnyway: item }),
+
+    //due
+    dues: [],
+    setDue: (items) => set({ dues: items }),
   }))
 );
 

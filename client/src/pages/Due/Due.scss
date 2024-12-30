@@ -59,6 +59,9 @@
         &:hover {
           background-color: #0056b3;
         }
+        &:disabled {
+          cursor: not-allowed;
+        }
       }
     }
   }
@@ -88,6 +91,22 @@
           padding: 12px;
           text-align: left;
           border-bottom: 1px solid #ccc;
+          .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.9rem;
+
+            &:hover {
+              background-color: #c0392b;
+            }
+            &:disabled {
+              cursor: not-allowed;
+            }
+          }
         }
 
         th {
@@ -104,6 +123,9 @@
 
           &:hover {
             background-color: #218838;
+          }
+          &:disabled {
+            cursor: not-allowed;
           }
         }
       }

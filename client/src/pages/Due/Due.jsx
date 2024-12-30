@@ -1,33 +1,128 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import "./Due.scss"
+import { MdDelete } from "react-icons/md";
+import axios from "axios";
+import { SERVER_URL } from "../../store/store";
+import toast from "react-hot-toast";
+import { useStore } from '../../store/store.js';
+
+
 
 const Due = () => {
-    const [unpaidEntries, setUnpaidEntries] = useState([]);
-    const [paidEntries, setPaidEntries] = useState([]);
-    const [formData, setFormData] = useState({ name: "", amount: "", reason: "" });
+    const [isLoading, setIsLoading] = useState(false)
+    const [name, setName] = useState("");
+    const [amount, setAmount] = useState("");
+    const [reason, setReason] = useState("");
+    const { dues, setDue } = useStore();
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+
+    const getAllDue = async () => {
+        try {
+            setIsLoading(true)
+            const response = await axios.get(`${SERVER_URL}/other/get-all-due`, { withCredentials: true })
+            setDue(response.data.due)
+            setIsLoading(false)
+
+        } catch (error) {
+            console.log(error)
+            setIsLoading(false)
+            toast.error("Can't fetch due")
+        }
+    }
+
+
+    const addEntry = async (e) => {
+        e.preventDefault();
+        try {
+
+            setIsLoading(true)
+            // Assume `taskDate` is a separate state for the date
+            const response = await axios.post(
+                `${SERVER_URL}/other/add-due`,
+                {
+                    name,
+                    amount,
+                    reason
+                },
+                {
+                    withCredentials: true, // Include credentials (cookies, HTTP auth)
+                }
+            );
+
+            if (response && response.data.success === true) {
+
+                toast.success(`${response.data.message}`);
+                getAllDue(); // Refresh tasks
+                console.log(dues)
+                setIsLoading(false)
+            }
+        } catch (error) {
+            console.error(error);
+            setIsLoading(false)
+            toast.error(error.response.data.error);
+        }
     };
 
-    const addEntry = () => {
-        if (!formData.name || !formData.amount || !formData.reason) {
-            alert("All fields are required!");
-            return;
+    const markAsPaid = async (index) => {
+        // console.log("hiii")
+        try {
+            setIsLoading(true)
+            const response = await axios.put(`${SERVER_URL}/other/update-due/${index}`, {
+                withCredentials: true,  // Include credentials (cookies, HTTP auth)
+            })
+
+            if (response && response.data.success === true) {
+
+                toast.success(`${response.data.message}`)
+                getAllDue()
+                setIsLoading(false)
+            }
+        } catch (error) {
+            toast.error("Error updating due")
+            console.log(error)
+            setIsLoading(false)
+        }
+    };
+
+    const handleDeleteDue = async (_id) => {
+        try {
+            setIsLoading(true)
+            const response = await axios.delete(`${SERVER_URL}/other/delete-due/${_id}`, {
+                withCredentials: true,  // Include credentials (cookies, HTTP auth)
+            })
+
+            if (response && response.data.success === true) {
+                toast.success(`${response.data.message}`)
+                getAllDue()
+                setIsLoading(false)
+
+            }
+        } catch (error) {
+            console.log(error)
+            setIsLoading(false)
+            toast.error("Error deleting due")
         }
 
-        setUnpaidEntries([...unpaidEntries, formData]);
-        setFormData({ name: "", amount: "", reason: "" });
-    };
+    }
 
-    const markAsPaid = (index) => {
-        const entryToMove = unpaidEntries[index];
-        setUnpaidEntries(unpaidEntries.filter((_, i) => i !== index));
-        setPaidEntries([...paidEntries, entryToMove]);
-    };
+    useEffect(() => {
+        const fetchDue = async () => {
+            try {
+                setIsLoading(true)
+                const response = await axios.get(`${SERVER_URL}/other/get-all-due`, { withCredentials: true })
+                setDue(response.data.due)
+                setIsLoading(false)
 
+            } catch (error) {
+                console.log(error)
+                setIsLoading(false)
+                toast.error("Can't fetch due")
+            }
+        }
+
+        fetchDue()
+    }, [setDue])
 
 
     return (
@@ -43,25 +138,28 @@ const Due = () => {
                             <input
                                 type="text"
                                 name="name"
-                                value={formData.name}
+                                value={name}
                                 placeholder="Name"
-                                onChange={handleInputChange}
+                                onChange={(e) => setName(e.target.value)}
+                                required
                             />
                             <input
                                 type="number"
                                 name="amount"
-                                value={formData.amount}
+                                value={amount}
                                 placeholder="Amount"
-                                onChange={handleInputChange}
+                                onChange={(e) => setAmount(e.target.value)}
+                                required
                             />
                             <input
                                 type="text"
                                 name="reason"
-                                value={formData.reason}
+                                value={reason}
                                 placeholder="Reason"
-                                onChange={handleInputChange}
+                                onChange={(e) => setReason(e.target.value)}
+                                required
                             />
-                            <button onClick={addEntry}>Add</button>
+                            <button onClick={addEntry} disabled={isLoading} >Add</button>
                         </div>
                     </div>
 
@@ -78,16 +176,18 @@ const Due = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {unpaidEntries.map((entry, index) => (
-                                        <tr key={index}>
-                                            <td>{entry.name}</td>
-                                            <td>{entry.amount}</td>
-                                            <td>{entry.reason}</td>
-                                            <td>
-                                                <button onClick={() => markAsPaid(index)}>Mark as Paid</button>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {dues.map((due, index) =>
+                                        due.status === "unpaid" && (
+                                            <tr key={index}>
+                                                <td>{due.name}</td>
+                                                <td>{due.amount}</td>
+                                                <td>{due.reason}</td>
+                                                <td>
+                                                    <button onClick={() => markAsPaid(due._id)} disabled={isLoading}>Mark as Paid</button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -100,15 +200,22 @@ const Due = () => {
                                         <th>Name</th>
                                         <th>Amount</th>
                                         <th>Reason</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {paidEntries.map((entry, index) => (
-                                        <tr key={index}>
-                                            <td>{entry.name}</td>
-                                            <td>{entry.amount}</td>
-                                            <td>{entry.reason}</td>
-                                        </tr>
+                                    {dues.map((due, index) => (
+                                        due.status === "paid" && (
+                                            <tr key={index}>
+                                                <td>{due.name}</td>
+                                                <td>{due.amount}</td>
+                                                <td>{due.reason}</td>
+                                                <td><button onClick={() => handleDeleteDue(due._id)} className="delete-btn" disabled={isLoading}>
+                                                    <MdDelete size={20} />
+                                                </button>
+                                                </td>
+                                            </tr>
+                                        )
                                     ))}
                                 </tbody>
                             </table>

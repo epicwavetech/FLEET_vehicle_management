@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 
 const DateTimeModal = ({ isOpen, onClose, onSave }) => {
     const [date, setDate] = useState("");
+    const [Task, setTask] = useState("");
     const [tHours, setTaskHours] = useState("");
     const [tMinutes, setTaskMinutes] = useState("");
     const [tPeriod, setTaskPeriod] = useState("AM");
@@ -16,15 +17,30 @@ const DateTimeModal = ({ isOpen, onClose, onSave }) => {
     if (!isOpen) return null;
 
     const handleSave = () => {
-        onSave({ date, tHours, tMinutes, tPeriod }); // Pass combined date and time to parent
+        onSave({ date, tHours, tMinutes, tPeriod, Task });
+        setDate("")
+        setTask("")
+        setTaskHours("")
+        setTaskMinutes("")
+        setTaskPeriod("")
         onClose();
     };
 
     return ReactDOM.createPortal(
         <div className="modal-overlay">
             <div className="modal-contentf">
-                <h2>Update Date and Time</h2>
+                <h2>Update Task</h2>
                 <div className="modal-inputs">
+                    {/* Task Picker */}
+                    <label>
+                        Task:
+                        <input
+                            type="text"
+                            value={Task}
+                            onChange={(e) => setTask(e.target.value)}
+                            className="task-input"
+                        />
+                    </label>
                     {/* Date Picker */}
                     <label>
                         Date:

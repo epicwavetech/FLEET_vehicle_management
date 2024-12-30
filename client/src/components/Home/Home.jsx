@@ -119,11 +119,11 @@ const Home = () => {
         setIsEditTaskModal(false)
         setTaskId("")
     }
-    const handleDateTimeModalSubmit = async ({ date, tHours, tMinutes, tPeriod }) => {
+    const handleDateTimeModalSubmit = async ({ date, tHours, tMinutes, tPeriod, Task }) => {
         try {
             setEditBtnLoading(true)
             setIsEditTaskModal(false)
-            const response = await axios.put(`${SERVER_URL}/other/update-task/${taskId}`, { date: date, hours: tHours, minutes: tMinutes, period: tPeriod }, {
+            const response = await axios.put(`${SERVER_URL}/other/update-task/${taskId}`, { date: date, hours: tHours, minutes: tMinutes, period: tPeriod, task: Task }, {
                 withCredentials: true,  // Include credentials (cookies, HTTP auth)
             })
 
