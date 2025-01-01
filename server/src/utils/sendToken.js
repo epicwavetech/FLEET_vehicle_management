@@ -6,7 +6,7 @@ export const sendToken = (res, admin) => {
   });
 
   const options = {
-    expires: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
+    expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
     httpOnly: process.env.NODE_ENV === "production", // Cookie is not accessible via JavaScript
     secure: process.env.NODE_ENV === "production", // Set to true if using HTTPS
     sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Helps prevent CSRF attacks
