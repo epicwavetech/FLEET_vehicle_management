@@ -10,6 +10,8 @@ import Navbar from '../../components/Navbar/Navbar.jsx';
 import { IoIosEye } from "react-icons/io";
 import { MdEditDocument } from "react-icons/md";
 import { downloadAllClientsData } from '../../utils/downloadXlsx.js';
+import { MdDelete } from "react-icons/md";
+
 
 
 
@@ -189,6 +191,29 @@ const Clients = () => {
 
     };
 
+        //<================================================DELETE VEHICLE====================================================>
+    const deleteVehicle = async (_id) => {
+        try {
+            setIsLoadingCursor(true)
+            setIsDeleteLoading(true)
+            const response = await axios.delete(`${SERVER_URL}/vehicle/delete-vehicle/${_id}`, {
+                withCredentials: true,  // Include credentials (cookies, HTTP auth)
+            })
+
+            if (response && response.data.success === true) {
+                setIsLoadingCursor(false)
+                setIsDeleteLoading(false)
+                toast.success(`${response.data.message}`)
+                fetchSingleClientVehicles(expandedRows[0])
+            }
+        } catch (error) {
+            setIsLoadingCursor(false)
+            setIsDeleteLoading(false)
+            console.log(error)
+            toast.error("Error! Try again later")
+        }
+    }
+
     //<========================================UPDATE EXPIRING DOCUMENTS==============================================>
     const handleExpiryModal = (vehicleId, docType, public_id) => {
         setVehicleId(vehicleId)
@@ -333,6 +358,8 @@ const Clients = () => {
                                                             <th>RC</th>
                                                             <th>Fitness</th>
                                                             <th>Permit</th>
+                                                            <th className='delete-vehicle-header'>Action</th>
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -350,6 +377,7 @@ const Clients = () => {
                                                                 <td>{vehicle.fitness ? reverseDateFormat(vehicle.fitness.expiryDate) : ""}{vehicle.fitness ? (<><a target='_blank' href={vehicle.fitness.pdf.url}><IoIosEye size={20} /></a><MdEditDocument size={20} onClick={() => { handleExpiryModal(vehicle._id, "fitness", vehicle.fitness.pdf.public_id) }} /></>) : (<><MdEditDocument size={20} onClick={() => { handleExpiryModal(vehicle._id, "fitness") }} /></>)}</td>
 
                                                                 <td>{vehicle.permit ? reverseDateFormat(vehicle.permit.expiryDate) : ""}{vehicle.permit ? (<><a target='_blank' href={vehicle.permit.pdf.url}><IoIosEye size={20} /></a><MdEditDocument size={20} onClick={() => { handleExpiryModal(vehicle._id, "permit", vehicle.permit.pdf.public_id) }} /></>) : (<><MdEditDocument size={20} onClick={() => { handleExpiryModal(vehicle._id, "fitness") }} /></>)} </td>
+                                                                <td onClick={() => { deleteVehicle(vehicle._id) }} className={isDeleteLoading ? `delete-vehicle-loading` : `delete-vehicle`}><MdDelete /></td>
                                                             </tr>
                                                         ))}
                                                     </tbody>
