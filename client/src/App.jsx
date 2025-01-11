@@ -24,32 +24,32 @@ const Due = React.lazy(() => import("./pages/Due/Due.jsx"))
 
 const App = () => {
   const { isLogin, setIsLogin } = useStore();
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
 
 
   // Check for login admin or not on page load
-  useEffect(() => {
-    if (isLogin === null) {
-      setIsLoading(true)
-      const checkLogin = async () => {
-        try {
-          const response = await axios.get(`${SERVER_URL}/auth/login-check`, { withCredentials: true })
-          if (response.data.success === true) {
-            setIsLogin(true)
-            setIsLoading(false)
-          }
-        } catch (error) {
-          console.log(error)
-          setIsLogin(false)
-          setIsLoading(false)
-        }
-      }
-      checkLogin()
-    } else {
-      return
-    }
-  }, [setIsLogin, isLogin]);
+  // useEffect(() => {
+  //   if (isLogin === null) {
+  //     setIsLoading(true)
+  //     const checkLogin = async () => {
+  //       try {
+  //         const response = await axios.get(`${SERVER_URL}/auth/login-check`, { withCredentials: true })
+  //         if (response.data.success === true) {
+  //           setIsLogin(true)
+  //           setIsLoading(false)
+  //         }
+  //       } catch (error) {
+  //         console.log(error)
+  //         setIsLogin(false)
+  //         setIsLoading(false)
+  //       }
+  //     }
+  //     checkLogin()
+  //   } else {
+  //     return
+  //   }
+  // }, [setIsLogin, isLogin]);
   const router = createBrowserRouter([
     { path: "/", element: isLogin ? <Navigate to="/dashboard" /> : <Login /> },
     {
@@ -66,10 +66,15 @@ const App = () => {
   return (
     <>
       {isLoading && (
-        <div className="lazy-div"><p className='lazy-loading'></p></div>
+        <div className="lazy-div">
+          <h3>This website is temporarily unavailable.<br/>
+          Kindly reach out the developer to restore access.(Contact No: 7002022342)<br/>
+          Thank you for your understanding.</h3>
+        </div>
       )}
-      <RouterProvider router={router} />
-      <Toaster position='top-center' />
+{/*       //<p className='lazy-loading'></p>
+     // <RouterProvider router={router} />
+     // <Toaster position='top-center' /> */}
     </>
   )
 }
