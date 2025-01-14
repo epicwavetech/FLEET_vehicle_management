@@ -28,7 +28,7 @@ const App = () => {
 
 
 
-  Check for login admin or not on page load
+  //Check for login admin or not on page load
   useEffect(() => {
     if (isLogin === null) {
       setIsLoading(true)
@@ -49,7 +49,7 @@ const App = () => {
     } else {
       return
     }
-  }, [setIsLogin, isLogin]);
+  }, [setIsLogin, isLogin])
   const router = createBrowserRouter([
     { path: "/", element: isLogin ? <Navigate to="/dashboard" /> : <Login /> },
     {
