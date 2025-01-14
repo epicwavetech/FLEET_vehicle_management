@@ -74,8 +74,8 @@ const App = () => {
         </div>
       )}
        
-     // <RouterProvider router={router} />
-     // <Toaster position='top-center' /> 
+      <RouterProvider router={router} />
+     <Toaster position='top-center' /> 
     </>
   )
 }
