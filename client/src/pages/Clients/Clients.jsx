@@ -376,7 +376,7 @@ const Clients = () => {
 
                                                                 <td>{vehicle.fitness ? reverseDateFormat(vehicle.fitness.expiryDate) : ""}{vehicle.fitness ? (<><a target='_blank' href={vehicle.fitness.pdf.url}><IoIosEye size={20} /></a><MdEditDocument size={20} onClick={() => { handleExpiryModal(vehicle._id, "fitness", vehicle.fitness.pdf.public_id) }} /></>) : (<><MdEditDocument size={20} onClick={() => { handleExpiryModal(vehicle._id, "fitness") }} /></>)}</td>
 
-                                                                <td>{vehicle.permit ? reverseDateFormat(vehicle.permit.expiryDate) : ""}{vehicle.permit ? (<><a target='_blank' href={vehicle.permit.pdf.url}><IoIosEye size={20} /></a><MdEditDocument size={20} onClick={() => { handleExpiryModal(vehicle._id, "permit", vehicle.permit.pdf.public_id) }} /></>) : (<><MdEditDocument size={20} onClick={() => { handleExpiryModal(vehicle._id, "fitness") }} /></>)} </td>
+                                                                <td>{vehicle.permit ? reverseDateFormat(vehicle.permit.expiryDate) : ""}{vehicle.permit ? (<><a target='_blank' href={vehicle.permit.pdf.url}><IoIosEye size={20} /></a><MdEditDocument size={20} onClick={() => { handleExpiryModal(vehicle._id, "permit", vehicle.permit.pdf.public_id) }} /></>) : (<><MdEditDocument size={20} onClick={() => { handleExpiryModal(vehicle._id, "permit") }} /></>)} </td>
                                                                 <td onClick={() => { deleteVehicle(vehicle._id) }} className={isDeleteLoading ? `delete-vehicle-loading` : `delete-vehicle`}><MdDelete /></td>
                                                             </tr>
                                                         ))}
